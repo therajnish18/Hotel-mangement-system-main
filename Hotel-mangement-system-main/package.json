@@ -1,0 +1,92 @@
+{
+  "name": "restaurant-management-smarudhi",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Restaurant Management",
+  "author": "The Demon Sid",
+  "type": "module",
+  "main": "dist-electron/main.js",
+  "scripts": {
+    "dev": "pnpm run \"/^dev:.*/\"",
+    "dev:react": "vite",
+    "copy:json": "copyfiles -f src/electron/printer/restaurantInfo.json dist-electron",
+    "dev:electron": "pnpm transpile:electron && pnpm copy:json  &&cross-env NODE_ENV=development electron .",
+    "build:react": "tsc -b && vite build",
+    "lint": "eslint .",
+    "transpile:electron": "tsc --project src/electron/tsconfig.json",
+    "dist:mac": "pnpm transpile:electron && pnpm build:react && pnpm copy:json && electron-builder --mac --arm64",
+    "dist:win": "pnpm transpile:electron && pnpm build:react && pnpm copy:json && electron-builder --win --x64",
+    "dist:linux": "pnpm transpile:electron && pnpm build:react && pnpm copy:json && electron-builder --linux --x64",
+    "postinstall": "electron-rebuild -f -w better-sqlite3"
+  },
+  "build": {
+    "appId": "com.the_demon_sid.samrudhi",
+    "files": [
+      "dist-electron",
+      "dist-react"
+    ],
+    "extraResources": [
+      "dist-electron/preload.cjs",
+      "src/assets/**",
+      {
+        "from": "src/electron/database/restaurant.db",
+        "to": "database/restaurant.db"
+      }
+    ],
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "AppImage",
+      "category": "Utility",
+      "icon": "src/assets/meal.png"
+    },
+    "win": {
+      "target": "NSIS",
+      "icon": "src/assets/icon.png"
+    }
+  },
+  "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.4",
+    "@radix-ui/react-label": "^2.1.1",
+    "@radix-ui/react-popover": "^1.1.4",
+    "@radix-ui/react-select": "^2.1.4",
+    "@radix-ui/react-slot": "^1.1.1",
+    "@radix-ui/react-toast": "^1.2.4",
+    "better-sqlite3": "^11.7.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "lucide-react": "^0.469.0",
+    "react": "^18.3.1",
+    "react-day-picker": "8.10.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.1",
+    "tailwind-merge": "^2.5.5",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/node": "^22.10.2",
+    "@types/react": "^18.3.17",
+    "@types/react-dom": "^18.3.5",
+    "@types/react-router-dom": "^5.3.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "copyfiles": "^2.4.1",
+    "cross-env": "^7.0.3",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "electron-rebuild": "^3.2.9",
+    "eslint": "^9.17.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "globals": "^15.13.0",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "~5.6.2",
+    "typescript-eslint": "^8.18.1",
+    "vite": "^6.0.3"
+  }
+}
